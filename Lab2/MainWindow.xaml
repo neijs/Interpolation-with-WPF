@@ -1,0 +1,115 @@
+﻿<Window x:Class="SpringLab2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpringLab2"
+        xmlns:userControls="clr-namespace:SpringLab2.View.UserControls"
+        xmlns:converters="clr-namespace:SpringLab2.Converters" d:DataContext="{d:DesignInstance Type=local:ViewData}"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="540" Width="800">
+    <Window.Resources>
+        <DataTemplate x:Key="key_template">
+            <TextBlock  Text="{Binding Path = Method.Name}" />
+        </DataTemplate>
+        <converters:BoundariesMultiConverter x:Key="boundConverter_key"/>
+        </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="File" FontSize="16" FontWeight="Light">
+                <MenuItem Name="save_menu" Click="save_btn_Click" Header="Save" FontSize="16" FontWeight="Light"/>
+            </MenuItem>
+            <MenuItem Header="Execute" FontSize="16" FontWeight="Light">
+                <MenuItem Name="rdfc_menu" Click="rdfc_btn_Click" Header="RawData from Controls" FontSize="16" FontWeight="Light"/>
+                <MenuItem Name="rdff_menu" Click="rdff_btn_Click" Header="RawData from File" FontSize="16" FontWeight="Light"/>
+            </MenuItem>
+        </Menu>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="270"/>
+                <ColumnDefinition Width="0.65*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="RawData Input section" FontSize="20" FontWeight="Light" HorizontalAlignment="Center"/>
+                <userControls:ClearableTextBox Text="{Binding InterpolationBoundsText, UpdateSourceTrigger=LostFocus, Mode=OneWayToSource}" x:Name="bounds_tb" Width="250" Height="40" Placeholder="Interpolation Boundaries"/>
+
+                <userControls:ClearableTextBox x:Name="nodes_tb" Width="250" Height="40"
+                    Text="{Binding NodeQnt, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}" Placeholder="Nodes amount"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,5">
+                    <RadioButton Name="ugrid_rb" Content="Uniform Grid" IsChecked="{Binding Uniform, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"/>
+                    <RadioButton Content="Nonuniform Grid" Margin="20,0,0,0"/>
+                </StackPanel>
+                <TextBlock Text="Choose function for value initialization" FontSize="13" FontWeight="Light" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,5"/>
+                <ComboBox Name="func_cb" Width="250"
+                    ItemsSource="{Binding ListFRaw, UpdateSourceTrigger=PropertyChanged}" 
+                    ItemTemplate="{StaticResource key_template}"
+                    SelectedItem="{Binding FRaw, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="SplineData Input section" FontSize="20" FontWeight="Light" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                <userControls:ClearableTextBox x:Name="nodes_spl_tb" Width="250" Height="40" Placeholder="Nodes number for spline values"
+                    Text="{Binding NGrid, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"/>
+                <userControls:ClearableTextBox x:Name="leftder_tb" Width="250" Height="40" Placeholder="Derivative value on the left"
+                    Text="{Binding LeftDer, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"/>
+                <userControls:ClearableTextBox x:Name="rightder_tb" Width="250" Height="40" Placeholder="Derivative value on the right"
+                    Text="{Binding RightDer, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"/>
+                <Button Name="save_btn" Click="save_btn_Click" Content="Save" FontSize="15" FontWeight="Light" Width="170" Margin="0,15,0,0"/>
+                <Button Name="rdfc_btn" Click="rdfc_btn_Click" Content="From Controls" FontSize="15" FontWeight="Light" Width="170" Margin="0,2,0,0"/>
+                <Button Name="rdff_btn" Click="rdff_btn_Click" Content="From File" FontSize="15" FontWeight="Light" Width="170" Margin="0,2,0,0"/>
+            </StackPanel>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.9*"/>
+                    <RowDefinition Height="0.1*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*"/>
+                        <ColumnDefinition Width="0.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Raw data section" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Light"/>
+                        <ListBox Name="rd_lb" VerticalAlignment="Center" HorizontalAlignment="Center" Height="400"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="Spline data section" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Light"/>
+                        <ListBox SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}" Name="sd_lb" VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Height="400">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="(coord:" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding coord}" Margin="5,0,0,0"/>
+                                        <TextBlock Text=", value:" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding value}" Margin="5,0,0,0"/>
+                                        <TextBlock Text=", d/dx:" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding fDer}" Margin="5,0,0,0"/>
+                                        <TextBlock Text=")" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.3*"/>
+                        <ColumnDefinition Width="0.7*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="Value of integral:" FontSize="15" FontWeight="Light"/>
+                        <TextBlock Name="integ_tb" Text="Not evaluated yet..." FontSize="15"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="Click an element above for close inspection:" FontSize="15" FontWeight="Light"/>
+                        <TextBlock Name="selected_tb" Text="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            <Rectangle Grid.Column="0" Fill="AliceBlue" Panel.ZIndex="-1"/>
+            <Rectangle Grid.Column="1" Fill="PaleGoldenrod" Panel.ZIndex="-1"/>
+        </Grid>
+    </Grid>
+</Window>
