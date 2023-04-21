@@ -1,20 +1,20 @@
 ﻿SpringLab2
-1.0.0.0
+
 
 winexe
 C#
 .cs
-d:\CSHARP\Lab2\Lab2\obj\Debug\
+D:\CSHARP\Lab2\Lab2\obj\Debug\
 SpringLab2
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-d:\CSHARP\Lab2\Lab2\App.xaml
+D:\CSHARP\Lab2\Lab2\App.xaml
 2935919585
 
-81413176298
+61113280275
 1961492080752
 MainWindow.xaml;View\UserControls\ClearableTextBox.xaml;
 
-True
+False
 

@@ -174,14 +174,21 @@ namespace SpringLab2
 
         private void OnInterpolationBoundsTextChanged() {
             string[] bounds = this.InterpolationBoundsText!.Split(new[] {';', ',', ' ', '/', '-'}, StringSplitOptions.RemoveEmptyEntries);
-            if (bounds.Length > 2) {
-                throw new ArgumentException("Found more than two values.", nameof(this.InterpolationBoundsText));
+            try
+            {
+                if (bounds.Length > 2) {
+                    throw new ArgumentException("Found more than two values.", nameof(this.InterpolationBoundsText));
+                }
+                if (double.TryParse(bounds.First(), out double boundAValue)) {
+                    this.BoundA = boundAValue;
+                }
+                if (double.TryParse(bounds.Last(), out double boundBValue)) {
+                    this.BoundB = boundBValue;
+                }
             }
-            if (double.TryParse(bounds.First(), out double boundAValue)) {
-                this.BoundA = boundAValue;
-            }
-            if (double.TryParse(bounds.Last(), out double boundBValue)) {
-                this.BoundB = boundBValue;
+            catch(Exception exc)
+            {
+                MessageBox.Show(exc.Message);
             }
         }
         public void Save(string filename)
